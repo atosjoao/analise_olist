@@ -43,7 +43,7 @@ Relatório detalhado com a análise descritiva dos três pilares.
 2. Métricas de Pirata (AARRR) para metodologia de análise
 3. Microsoft Excel para geração de gráficos
 
-# 5. Considerações Finais
+# 5. Considerações
 
 Este relatório, é uma primeira versão do projeto final que seria entregue ao solicitante. Ele foi desenvolvido em 2 dias e meio, contabilizando o processo de organização, consultas e escrita. Ao entregar esta primeira versão, os responsáveis por tomar as decisões serão capazes de obter os primeiros insights sobre o desempenho dos três pilares e nortear as consultas e análises do segundo ciclo de entregas deste projeto.
 
