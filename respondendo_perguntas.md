@@ -1,7 +1,5 @@
 # 7. Respondendo as Perguntas
 
----
-
 ## **7.1 Análise de Vendas:**
 
 - Qual é o volume de vendas ao longo do tempo?
