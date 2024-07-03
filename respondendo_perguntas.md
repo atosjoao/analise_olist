@@ -1,6 +1,6 @@
 # 7. Respondendo as Perguntas
 
-## **7.1 Análise de Vendas:**
+## 7.1 Análise de Vendas:
 
 - Qual é o volume de vendas ao longo do tempo?
 
@@ -13,20 +13,20 @@ FROM order_payments op
 	INNER JOIN orders o ON op.order_id = o.order_id
 GROUP BY strftime('%Y', o.order_purchase_timestamp)
 
-*--* Output
-*--* 2016	| R$ 59.362,34
-*--* 2017	| R$ 7.249.746,72
-*--* 2018	| R$ 8.699.763,04
+-- Output
+-- 2016	| R$ 59.362,34
+-- 2017	| R$ 7.249.746,72
+-- 2018	| R$ 8.699.763,04
 -- TOTAL | R$ 16.008.872,11
 
-*--* TOTAL DE VENDAS POR MÊS
-**SELECT
+-- TOTAL DE VENDAS POR MÊS
+SELECT
 	strftime('%Y-%m', o.order_purchase_timestamp) AS 'PERÍODO',
 	SUM(oi.price) AS 'TOTAL DE VENDAS'
 FROM orders o INNER JOIN order_items oi ON o.order_id = oi.order_id 
 GROUP BY strftime('%Y-%m', o.order_purchase_timestamp)
 
-*-- Output*
+-- Output
 -- 2016-09: R$ 267,36
 -- 2016-10: R$ 49.507,66
 -- 2016-12: R$ 10,9
@@ -65,7 +65,7 @@ FROM order_payments op INNER JOIN orders o ON op.order_id = o.order_id
 GROUP BY strftime('%m', o.order_purchase_timestamp)
 ORDER BY SUM(op.payment_value) DESC;
 
--- *Output*
+-- Output
 --Maio:	1.746.900,96
 --Agosto:	R$ 1.696.821,64
 --Julho: R$ 1.658.923,67
@@ -79,7 +79,7 @@ ORDER BY SUM(op.payment_value) DESC;
 --Outubro: R$ 839.358,02
 --Setembro: R$ 732.454,23
 
-**-- Qual o mês com o maior quantidade de vendas de 2016 a 2018?
+-- Qual o mês com o maior quantidade de vendas de 2016 a 2018?
 SELECT
 	strftime('%m', o.order_purchase_timestamp) AS 'MÊS',
 	COUNT(o.order_id) AS 'QTD. VENDAS'
@@ -108,14 +108,14 @@ ORDER BY COUNT(o.order_id) DESC;
 -- Medindo a quantidade de vendas
 SELECT 
 	p.product_category_name AS 'NOME DA CATEGORIA', 
-	COUNT(*) AS 'QTD. VENDAS'
+	COUNT() AS 'QTD. VENDAS'
 FROM order_items oi 
 	INNER JOIN products p ON oi.product_id = p.product_id
 GROUP BY p.product_category_name
-ORDER BY COUNT(*) DESC
+ORDER BY COUNT() DESC
 LIMIT 10;
 
--- *Output*
+-- Output
 
 -- cama_mesa_banho: 11.115
 -- beleza_saude: 9.670
@@ -139,8 +139,8 @@ SELECT
 FROM customer c INNER JOIN orders o ON (c.customer_id = o.customer_id )
 INNER JOIN order_payments op ON o.order_id = op.order_id
 
--- *Output
--- R$ 166,59*
+-- Output
+-- R$ 166,59
 ```
 
 - Quais as 10 cidades/estados representam as maiores contribuições nas vendas?
@@ -149,14 +149,14 @@ INNER JOIN order_payments op ON o.order_id = op.order_id
 -- Cidades
 SELECT
 	c.customer_city AS 'CIDADE',
-	CAST(100. * COUNT(c.customer_city) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT(c.customer_city) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM customer c INNER JOIN orders o ON (c.customer_id = o.customer_id )
 INNER JOIN order_payments op ON o.order_id = op.order_id 
 GROUP BY c.customer_city
-ORDER BY CAST(100. * COUNT(c.customer_city) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) DESC
+ORDER BY CAST(100.  COUNT(c.customer_city) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) DESC
 LIMIT 10;
 
--- *Output*
+-- Output
 -- sao paulo: 15.61% 
 -- rio de janeiro: 6.93%
 -- belo horizonte	2.76%
@@ -168,17 +168,17 @@ LIMIT 10;
 -- guarulhos	1.20%
 -- sao bernardo do campo 0.94%
 
-*-- Estados*
+-- Estados
 SELECT
 	c.customer_state AS 'ESTADO',
-	CAST(100. * COUNT(c.customer_state) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT(c.customer_state) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM customer c INNER JOIN orders o ON (c.customer_id = o.customer_id )
 INNER JOIN order_payments op ON o.order_id = op.order_id 
 GROUP BY c.customer_state 
-ORDER BY CAST(100. * COUNT(c.customer_state) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) DESC
+ORDER BY CAST(100.  COUNT(c.customer_state) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) DESC
 LIMIT 10;
 
--- *Output*
+-- Output
 -- SP	41.99%
 -- RJ	13.02%
 -- MG	11.64%
@@ -194,11 +194,11 @@ LIMIT 10;
 - Quais as 10 cidades/estados  possuem as maiores médias de compras mensais?
 
 ```sql
-*--* ESTADOS COM A MAIOR MÉDIA DE COMPRAS MENSAIS
-**SELECT
+-- ESTADOS COM A MAIOR MÉDIA DE COMPRAS MENSAIS
+SELECT
 	c.customer_state AS 'ESTADO',
 	COUNT(o.order_id) / COUNT(DISTINCT strftime('%Y-%m', o.order_purchase_timestamp)) AS 'MÉDIA VENDAS', 
-	CAST(100. * COUNT(*) / SUM(COUNT(*)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT() / SUM(COUNT()) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM customer c 
 	INNER JOIN orders o ON c.customer_id = o.customer_id 
 GROUP BY c.customer_state
@@ -223,7 +223,7 @@ LIMIT 10;
 SELECT
 	c.customer_city AS 'CIDADE',
 	COUNT(o.order_id) / COUNT(DISTINCT strftime('%Y-%m', o.order_purchase_timestamp)) AS 'MÉDIA VENDAS', 
-	CAST(100. * COUNT(*) / SUM(COUNT(*)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT() / SUM(COUNT()) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM customer c 
 	INNER JOIN orders o ON c.customer_id = o.customer_id 
 GROUP BY c.customer_city
@@ -257,9 +257,9 @@ GROUP BY oi.seller_id
 ORDER BY SUM(op.payment_value) DESC
 LIMIT 10;
 
--- *Output (por conta da LGPD, o nome dos vendedores foram codificados)*
+-- Output (por conta da LGPD, o nome dos vendedores foram codificados)
 -- NOME DO VENDEDEOR | VALOR TOTAL | MÉDIA POR VENDA
-**-- 7c67e1448b00f6e969d365cea6b010ab: R$ 507.166,91 | R$ 349.28
+-- 7c67e1448b00f6e969d365cea6b010ab: R$ 507.166,91 | R$ 349.28
 -- 1025f0e2d44d7041d6cf58b6550e0bfa: R$ 308.222,04 | R$ 210.82
 -- 4a3ca9315b744ce9f8e9374361493884: R$ 301.245,27 | R$ 141.23
 -- 1f50f920176fa81dab994f9023523100: R$ 290.253,42 | R$ 144.54
@@ -279,17 +279,17 @@ GROUP BY oi.seller_id
 ORDER BY COUNT(op.payment_value) DESC
 LIMIT 10;
 
--- *Output (por conta da LGPD, o nome dos vendedores foram codificados)*
--- *4a3ca9315b744ce9f8e9374361493884: 2.133*
--- *6560211a19b47992c3666cc44a7e94c0: 2.122*
--- *1f50f920176fa81dab994f9023523100: 2.008*
--- *cc419e0650a3c5ba77189a1882b7556a: 1.847*
--- *da8622b14eb17ae2831f4ac5b9dab84a: 1.639*
--- *955fee9216a65b617aa5c0531780ce60: 1.528*
--- *1025f0e2d44d7041d6cf58b6550e0bfa: 1.462*
--- *7c67e1448b00f6e969d365cea6b010ab: 1.452*
--- *7a67c85e85bb2ce8582c35f2203ad736: 1.240*
--- *ea8482cd71df3c1969d7b9473ff13abc: 1.239*
+-- Output (por conta da LGPD, o nome dos vendedores foram codificados)
+-- 4a3ca9315b744ce9f8e9374361493884: 2.133
+-- 6560211a19b47992c3666cc44a7e94c0: 2.122
+-- 1f50f920176fa81dab994f9023523100: 2.008
+-- cc419e0650a3c5ba77189a1882b7556a: 1.847
+-- da8622b14eb17ae2831f4ac5b9dab84a: 1.639
+-- 955fee9216a65b617aa5c0531780ce60: 1.528
+-- 1025f0e2d44d7041d6cf58b6550e0bfa: 1.462
+-- 7c67e1448b00f6e969d365cea6b010ab: 1.452
+-- 7a67c85e85bb2ce8582c35f2203ad736: 1.240
+-- ea8482cd71df3c1969d7b9473ff13abc: 1.239
 
 -- Ranking dos vendedores por estados maior valor acumulado de vendas)
 SELECT
@@ -300,7 +300,7 @@ GROUP BY s.seller_state
 ORDER BY SUM(op.payment_value) DESC
 LIMIT 10;
 
--- *Output
+-- Output
 
 -- SP: R$ 13.369.880,60
 -- PR: R$ 1.846.047,65
@@ -311,11 +311,11 @@ LIMIT 10;
 -- BA: R$ 367.899,46
 -- DF: R$ 137.784,97
 -- PE: R$ 124.894,83
--- GO: R$ 112.183,09*
+-- GO: R$ 112.183,09
 
 -- Ranking dos vendedores por estados (maior quantidade vendas)
 
-**SELECT
+SELECT
 	s.seller_state,
 	COUNT(op.payment_value) AS 'QTD. DE VENDAS'
 FROM order_items oi INNER JOIN order_payments op ON oi.order_id = op.order_id INNER JOIN sellers s ON oi.seller_id = s.seller_id 
@@ -323,7 +323,7 @@ GROUP BY s.seller_state
 ORDER BY COUNT(op.payment_value) DESC
 LIMIT 10;
 
--- *Output*
+-- Output
 
 -- SP: 83.854
 -- MG: 9.260
@@ -344,13 +344,13 @@ SELECT
 	op.payment_type,
 	SUM(op.payment_value) AS 'VALOR TOTAL',
 	AVG(op.payment_value) AS 'MÉDIA POR TIPO DE PAGAMENTO',
-	CAST(100. * COUNT(op.payment_type) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT(op.payment_type) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM order_payments op 
 GROUP BY op.payment_type
 ORDER BY SUM(op.payment_value) DESC 
 
--- *Output: 
--- TOTAL POR TIPO DE PAGAMENTO | MÉDIA POR TIPO DE PAGAMENTO | PERC.*
+-- Output: 
+-- TOTAL POR TIPO DE PAGAMENTO | MÉDIA POR TIPO DE PAGAMENTO | PERC.
 
 -- credit_card: R$ 12.542.084,18 | R$ 163.31 |73.92 %
 -- boleto: R$ 2.869.361,26 | R$ 145.03 |19.04 %
@@ -360,19 +360,19 @@ ORDER BY SUM(op.payment_value) DESC
 SELECT 
 	op.payment_type,
 	COUNT(op.payment_value) AS 'VALOR TOTAL',
-	CAST(100. * COUNT(op.payment_type) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT(op.payment_type) / SUM(COUNT(op.payment_value)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM order_payments op 
 GROUP BY op.payment_type
 ORDER BY COUNT(op.payment_value) DESC 
 
--- *Output*
+-- Output
 -- credit_card: 76.795 | 73.92 %
 -- boleto: 19.784	| 19.04 %
 -- voucher: 5.775	| 5.55 %
 -- debit_card: 1.529	| 1.47 %
 ```
 
-## **7.2 Análise de Produto e Categoria:**
+## 7.2 Análise de Produto e Categoria:
 
 - Quais os preços que mais venderam?
 
@@ -409,7 +409,7 @@ SELECT
 	COUNT(DISTINCT p.product_category_name) AS 'QTD. DA CATEGORIA'
 FROM products p
 
--- *Output*
+-- Output
 -- 73 Categorias
 ```
 
@@ -476,7 +476,7 @@ GROUP BY p.product_category_name
 ORDER BY AVG(oi.price) ASC
 LIMIT 10;
 
--- *Output*
+-- Output
 
 -- CATEGORIA | MÉDIA DE PREÇO | QTD. DE VENDAS
 -- casa_conforto_2 | R$ 25,34 | 30
@@ -496,7 +496,7 @@ LIMIT 10;
 
 ```sql
 -- OS 10 PRODUTOS MAIS VENDIDOS E SUAS CATEGORIAS
-**SELECT 
+SELECT 
 	p.product_id, 
 	p.product_category_name, 
 	COUNT(oi.order_id) AS 'QTD. VENDAS',
@@ -508,25 +508,25 @@ GROUP BY p.product_id
 ORDER BY COUNT(oi.order_id) DESC
 LIMIT 10;
 
--- *Output (Por conta da sensibilidade dos dados, o nome do produto foi codificado)*
+-- Output (Por conta da sensibilidade dos dados, o nome do produto foi codificado)
 
 -- PRODUTO | CATEGORIA | QTD. VENDAS | VALOR ACUMULADO
-*-- aca2eb7d00ea1a7b8ebd4e68314663af* | *moveis_decoracao* | *536* | R$ *63.788,12
--- 99a4788cb24856965c36a24e339b6058* | *cama_mesa_banho* | *525* | R$ *63.161.39
--- 422879e10f46682990de24d770e7f83d* | *ferramentas_jardim* | *505* | R$ *79.512,22
--- 389d119b48cf3043d311335e499d9c6b* | *ferramentas_jardim* | *406* | R$ *48.616,43
--- 368c6c730842d78016ad823897a372db* | *ferramentas_jardim* | *395* | R$ *52.508,62
--- 53759a2ecddad2bb87a079a1f1519f73* | *ferramentas_jardim* | *389* | R$ *53.445,34
--- d1c427060a0f73f6b889a5c7c61f2ac4* | *informatica_acessorios* | *357* | R$ *70.557,90
--- 53b36df67ebb7c41585e8d54d6772e08* | *relogios_presentes* | *327* | R$ *48.994,30
--- 154e7e31ebfa092203795c972e5804a6* | *beleza_saude* | *283* | R$ *11.826,06
--- 3dd2a17168ec895c781a9191c1e95ad7* | *informatica_acessorios* | *278* | R$ *58.962,13*
+-- aca2eb7d00ea1a7b8ebd4e68314663af | moveis_decoracao | 536 | R$ 63.788,12
+-- 99a4788cb24856965c36a24e339b6058 | cama_mesa_banho | 525 | R$ 63.161.39
+-- 422879e10f46682990de24d770e7f83d | ferramentas_jardim | 505 | R$ 79.512,22
+-- 389d119b48cf3043d311335e499d9c6b | ferramentas_jardim | 406 | R$ 48.616,43
+-- 368c6c730842d78016ad823897a372db | ferramentas_jardim | 395 | R$ 52.508,62
+-- 53759a2ecddad2bb87a079a1f1519f73 | ferramentas_jardim | 389 | R$ 53.445,34
+-- d1c427060a0f73f6b889a5c7c61f2ac4 | informatica_acessorios | 357 | R$ 70.557,90
+-- 53b36df67ebb7c41585e8d54d6772e08 | relogios_presentes | 327 | R$ 48.994,30
+-- 154e7e31ebfa092203795c972e5804a6 | beleza_saude | 283 | R$ 11.826,06
+-- 3dd2a17168ec895c781a9191c1e95ad7 | informatica_acessorios | 278 | R$ 58.962,13
 
 -- 10 CATEGORIAS COM O MAIOR VOLUME DE VENDAS MENSAIS
 SELECT
 	p.product_category_name,
 	COUNT(o.order_id) / COUNT(DISTINCT strftime('%Y-%m', o.order_purchase_timestamp)) AS 'MÉDIA VENDAS', 
-	CAST(100. * COUNT(*) / SUM(COUNT(*)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT() / SUM(COUNT()) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM products p 
 	INNER JOIN order_items oi ON p.product_id = oi.product_id 
 	INNER JOIN order_payments op ON oi.order_id = op.order_id
@@ -535,19 +535,19 @@ GROUP BY p.product_category_name
 ORDER BY COUNT(o.order_id) / COUNT(DISTINCT strftime('%Y-%m', o.order_purchase_timestamp)) DESC
 LIMIT 10;
 
--- *Output 
+-- Output 
 
---* CATEGORIA | MÉDIA DE VENDAS MENSAIS | PERCENTUAL DAS VENDAS MENSAIS
-*--* cama_mesa_banho | 563 | 10.05%
-*--* beleza_saude | 474 | 8.47%
-*--* esporte_lazer | 425 | 7.60%
-*--* moveis_decoracao | 397 | 7.43%
-*--* informatica_acessorios | 384 | 6.87%
-*--* utilidades_domesticas | 350 | 6.25%
-*--* relogios_presentes | 295 | 5.27%
-*--* ferramentas_jardim | 217 | 3.88%
-*--* telefonia | 214 | 4.01%
-*--* automotivo | 208 | 3.72%
+-- CATEGORIA | MÉDIA DE VENDAS MENSAIS | PERCENTUAL DAS VENDAS MENSAIS
+-- cama_mesa_banho | 563 | 10.05%
+-- beleza_saude | 474 | 8.47%
+-- esporte_lazer | 425 | 7.60%
+-- moveis_decoracao | 397 | 7.43%
+-- informatica_acessorios | 384 | 6.87%
+-- utilidades_domesticas | 350 | 6.25%
+-- relogios_presentes | 295 | 5.27%
+-- ferramentas_jardim | 217 | 3.88%
+-- telefonia | 214 | 4.01%
+-- automotivo | 208 | 3.72%
 ```
 
 - Qual a distribuição geográfica das categorias?
@@ -568,7 +568,7 @@ FROM products p
 GROUP BY c.customer_city, p.product_category_name
 ORDER BY COUNT(oi.order_id) DESC
 
--- *Output*
+-- Output
 
 -- CIDADE | CATEGORIA | QTD. TOTAL DE VENDAS | VALOR TOTAL DE VENDAS
 -- sao paulo | cama_mesa_banho| 2.146 | R$ 284.303,94
@@ -619,7 +619,7 @@ LIMIT 10;
 -- PERCENTUAL DE COMPRAS PARCELADAS POR CATEGORIA
 SELECT
 	p.product_category_name 'CATEGORIA',
-	CAST(100. * COUNT(*) / SUM(COUNT(*)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL',
+	CAST(100.  COUNT() / SUM(COUNT()) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL',
 	COUNT(oi.order_id) AS 'QTD. VENDAS'
 FROM products p 
 	INNER JOIN order_items oi ON p.product_id = oi.product_id 
@@ -659,10 +659,10 @@ GROUP BY p.product_category_name
 ORDER BY AVG(or2.review_score) DESC
 LIMIT 10;
 
--- *Output
+-- Output
 
---* CATEGORIA | NOTA MÉDIA | QTD. AVALIAÇÕES
-**-- cds_dvds_musicais | 4.64 | 14
+-- CATEGORIA | NOTA MÉDIA | QTD. AVALIAÇÕES
+-- cds_dvds_musicais | 4.64 | 14
 -- fashion_roupa_infanto_juvenil | 4.5 | 8
 -- livros_interesse_geral | 4.43 | 553
 -- livros_importados | 4.4 | 60
@@ -716,7 +716,7 @@ LIMIT 10;
 
 -- Output
 
-*--* CATEGORIA | SHIPPING TIME
+-- CATEGORIA | SHIPPING TIME
 -- moveis_escritorio | 31.6 DIAS
 -- seguros_e_servicos | 31.0 DIAS
 -- fashion_calcados | 29.2 DIAS
@@ -729,7 +729,7 @@ LIMIT 10;
 -- eletrodomesticos_2 | 25.3 DIAS
 ```
 
-## **7.3 Análise do Cliente:**
+## 7.3 Análise do Cliente:
 
 - Qual é distribuição geográfica dos clientes?
 
@@ -737,7 +737,7 @@ LIMIT 10;
 SELECT 
 	c.customer_city AS 'CIDADE',
 	COUNT(DISTINCT c.customer_unique_id) AS 'QTD. CLIENTES',
-	CAST(100. * COUNT(*) / SUM(COUNT(*)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT() / SUM(COUNT()) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM customer c 
 GROUP BY c.customer_city 
 ORDER BY COUNT(DISTINCT c.customer_unique_id) DESC
@@ -759,7 +759,7 @@ LIMIT 10;
 SELECT 
 	c.customer_state,
 	COUNT(DISTINCT c.customer_unique_id) AS 'QTD. CLIENTES',
-	CAST(100. * COUNT(*) / SUM(COUNT(*)) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
+	CAST(100.  COUNT() / SUM(COUNT()) OVER () AS DECIMAL(10,2)) AS 'PERCENTUAL'
 FROM customer c 
 GROUP BY c.customer_state 
 ORDER BY COUNT(DISTINCT c.customer_unique_id) DESC
