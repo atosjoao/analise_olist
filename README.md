@@ -1,7 +1,7 @@
 # analise_olist
 Projeto para desenvolvimento pessoal em habilidades de SQL e Business Intelligence, aplicados ao E-Commerce.
 
-Contexto
+# Contexto:
 A empresa de e-commerce Olist, está buscando melhorar sua performance e entender melhor seus processos de negócios. Para isso, foi solicitada uma análise descritiva sobre o banco de dados disponível, com foco nos três pilares da empresa: Vendas, Produto e Comprador. Esta análise será crucial para identificar pontos fortes e áreas de melhoria, possibilitando a tomada de decisões mais informadas.
 
 # Case: Avaliação de Performance dos Três Pilares de Negócios da Empresa
