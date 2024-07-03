@@ -42,3 +42,11 @@ Relatório detalhado com a análise descritiva dos três pilares.
 1. SQL para extração e manipulação dos dados
 2. Métricas de Pirata (AARRR) para metodologia de análise
 3. Microsoft Excel para geração de gráficos
+
+# 5. Considerações Finais
+
+Este relatório, é uma primeira versão do projeto final que seria entregue ao solicitante. Ele foi desenvolvido em 2 dias e meio, contabilizando o processo de organização, consultas e escrita. Ao entregar esta primeira versão, os responsáveis por tomar as decisões serão capazes de obter os primeiros insights sobre o desempenho dos três pilares e nortear as consultas e análises do segundo ciclo de entregas deste projeto.
+
+Este segundo ciclo, caso houvesse tempo, seria focado inicialmente em criar novas perguntas a partir das respostas destas primeiras, como por exemplo “Quais foram categorias que mais venderam nos estados de Goiás, DF e Bahia?”, alinhando com conceitos da análise diagnóstica, com intuito de entender os fatores que contribuíram para estes resultados, inserindo uma segunda dimensão às conclusões acerca do fenômeno estudado.
+
+O número de ciclos, bem como os processos de cada um, serão norteados pelo tempo disponível para a entrega do projeto final. Dessa forma, toda a cadeia de desenvolvimento dessas soluções torna-se mais dinâmica e personalizável, com as respostas sendo cada vez mais diretas naquilo que os tomadores de decisão necessitam, dando celeridade e eficiência no processo de análise de dados.
